@@ -7,19 +7,15 @@ export default class OS {
 		"********** lemaraOS v0.0.1 ***********************<br>",
 		"(c) 1979 Kellehan Coporation, all rights reserved.<br>",
 		"Password "];
-		this.readyMessage = ["System ready",
-		"Type 'help' or 'about' for more information",
-		"**************************************************"];
 		this.ready = false;
 		this.loggedIn = false;
 		this.passwordTry = '';
 		this.passcode = 'pee';
-		this.programs = [{name: "welcome()"}];
+		this.programs = [];
 	}
 
 	send(message, user) {
 		if (this.loggedIn && this.ready) {
-
 			let newLine = document.createElement('p');
 			this.input.insertAdjacentElement('beforebegin', newLine);
 			this.input.innerHTML = "";
@@ -30,12 +26,7 @@ export default class OS {
 				newLine.innerHTML += message + "<br>";
 			}
 			if (this.programs.map(a => a.name).includes(message)) {
-				console.log(this.programs.filter(a => a.name == message));
-				this.readyMessage.forEach((msg) => {
-					// newLine.innerHTML += msg +"<br>";
-					this.send(msg);
-					console.log(this.loggedIn, this.ready);
-				});
+				this.programs.filter(a => a.name == message)[0].run(this);
 			}
 			
 		} else {

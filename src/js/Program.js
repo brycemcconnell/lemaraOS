@@ -1,8 +1,11 @@
 export default class Program {
-	constructor(name) {
-		this.name = name;
+	constructor(conf) {
+		this.name = conf.name;
+		this.output = conf.output;
 	}
-	run(parameters) {
-		// do stuff
+	run(os) {
+		this.output.forEach(line => {
+			os.send(line);
+		});
 	}
 }
