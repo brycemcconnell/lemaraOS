@@ -14,35 +14,40 @@ export default class OS {
 		this.loggedIn = false;
 		this.passwordTry = '';
 		this.passcode = 'pee';
+		this.programs = [{name: "welcome()"}];
 	}
 
 	send(message, user) {
-		if (this.ready) {
+		if (this.loggedIn && this.ready) {
+
 			let newLine = document.createElement('p');
+			this.input.insertAdjacentElement('beforebegin', newLine);
+			this.input.innerHTML = "";
 			if (user) {
 				newLine.innerHTML = '> ';
 				newLine.innerHTML += message + "<br>";
-			}
-			if (this.loggedIn) {
-				if (message == 'welcome()') {
-					this.readyMessage.forEach(function(msg) {
-						newLine.innerHTML += msg +"<br>";
-					});
-				}
-				this.input.insertAdjacentElement('beforebegin', newLine);
-				this.input.innerHTML = "";
 			} else {
-				if (this.passwordTry == this.passcode) {
-					this.input.innerHTML = "";
-					this.loggedIn = true;
-					this.bootMsg.innerHTML += '<br>Login successful<br>';
-					this.send('welcome()');
-				} else {
-					this.input.innerHTML = "";
-					this.passwordTry = '';
-				}
+				newLine.innerHTML += message + "<br>";
+			}
+			if (this.programs.map(a => a.name).includes(message)) {
+				console.log(this.programs.filter(a => a.name == message));
+				this.readyMessage.forEach((msg) => {
+					// newLine.innerHTML += msg +"<br>";
+					this.send(msg);
+					console.log(this.loggedIn, this.ready);
+				});
 			}
 			
+		} else {
+			if (this.passwordTry == this.passcode) {
+				this.input.innerHTML = "";
+				this.loggedIn = true;
+				this.bootMsg.innerHTML += '<br>Login successful<br>';
+				this.send('welcome()');
+			} else {
+				this.input.innerHTML = "";
+				this.passwordTry = '';
+			}
 		}
 	}
 
@@ -85,7 +90,6 @@ export default class OS {
 				self.send(message, true);
 			}
 		});
-
 		this.onStartup();
 	}
 
