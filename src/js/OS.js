@@ -12,21 +12,29 @@ export default class OS {
 		this.passwordTry = '';
 		this.passcode = 'pee';
 		this.programs = [];
+		this.display;
 	}
 
 	send(message, user) {
+		
 		if (this.loggedIn && this.ready) {
 			let newLine = document.createElement('p');
 			this.input.insertAdjacentElement('beforebegin', newLine);
 			this.input.innerHTML = "";
-			if (user) {
+			if (user === true) {
 				newLine.innerHTML = '> ';
 				newLine.innerHTML += message + "<br>";
 			} else {
 				newLine.innerHTML += message + "<br>";
 			}
+			// If the command is a program
 			if (this.programs.map(a => a.name).includes(message)) {
 				this.programs.filter(a => a.name == message)[0].run(this);
+			// If the command is likely a mispelt program
+			} else if (this.programs.map(a => a.name.slice(0, -2)).includes(message)) {
+				this.send(`Did you mean ${message}()?`);
+			} else if (message.match(/d/)){
+				console.log(`hit: ${message}`)
 			}
 			
 		} else {
@@ -34,15 +42,19 @@ export default class OS {
 				this.input.innerHTML = "";
 				this.loggedIn = true;
 				this.bootMsg.innerHTML += '<br>Login successful<br>';
-				this.send('welcome()');
+				this.programs.filter(a => a.name == 'welcome()')[0].run(this);
 			} else {
 				this.input.innerHTML = "";
 				this.passwordTry = '';
 			}
 		}
+
+		this.display.scrollTo(0,this.display.clientHeight);
 	}
 
 	boot(display) {
+		this.display = display;
+		this.display.style.paddingBottom = "60px";
 		this.input = document.createElement('p');
 		this.cursor = document.createElement('span');
 		this.bootMsg = document.createElement('span');
@@ -60,6 +72,8 @@ export default class OS {
 		},600);
 
 		window.addEventListener("keydown", function(event) {
+			// scroll to input on keypress
+			self.display.scrollTo(0,self.display.clientHeight);
 			// Input character
 			if (event.key.length == 1 && self.loggedIn) {
 				self.input.innerHTML += event.key;

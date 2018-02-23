@@ -1,5 +1,5 @@
 @charset "UTF-8";
-* { line-height: 1; }
-.lem__inline {display: inline;}
+* { line-height: 1.2; }
+.lem__inline {display: inline; padding-bottom: 36px;}
 .lem__hidden {visibility: 0; opacity: 0;}
 .lem__user-input:before {content: '> ';}
